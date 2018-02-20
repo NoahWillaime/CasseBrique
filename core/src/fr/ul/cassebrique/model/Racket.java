@@ -91,14 +91,12 @@ public class Racket {
     }
 
     public void moveTouch(int x){
-        if ( x < this.pos.x ){ //Superieur a Racket : Droite, Inferieur : Gauche
+        if ( x < getPosGauche().x*GameWorld.getMetersToPixels()){ //Superieur a Racket : Droite, Inferieur : Gauche
             //aller a gauche
-            if (pos.x - 10 > TextureFactory.getTexBorder().getWidth())
-                this.pos.x -= 10;
-        } else if (x > this.pos.x + width) {
+            moveLeft();
+        } else if (x > getPosDroite().x*GameWorld.getMetersToPixels()) {
             //aller a droite
-            if (pos.x + width + 10 < TextureFactory.getTexBack().getWidth()-(TextureFactory.getTexBorder().getWidth() * 2))
-                this.pos.x += 10;
+           moveRight();
         }
     }
 
@@ -120,7 +118,7 @@ public class Racket {
         Vector2 posg = getPosGauche();
         if ((posg.x*GameWorld.getMetersToPixels()) - 10 > TextureFactory.getTexBorder().getWidth()){
             posg.x -= 10*GameWorld.getPixelsToMeters();
-            Vector2 posd = getPosGauche();
+            Vector2 posd = getPosDroite();
             posd.x -= 10*GameWorld.getPixelsToMeters();
             Vector2 posm = getPosMillieu();
             posm.x -= 10*GameWorld.getPixelsToMeters();

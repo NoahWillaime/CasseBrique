@@ -49,10 +49,10 @@ public class GameWorld {
         balls.add(new Ball(this, pos2));
         Vector2 pos3 = new Vector2();
         pos3.x = getRacket().getPos().x + getRacket().getWidth()/2;
-        pos3.y = getRacket().getPos().y + getRacket().getHeight() + 200;
+        pos3.y = getRacket().getPos().y + getRacket().getHeight();
         pos3.y += TextureFactory.getTexBall().getHeight()/2;
         balls.add(new Ball(this, pos3));
-        balls.get(2).setSpeed(new Vector2(100, -180));
+        balls.get(2).setSpeed(new Vector2(0, -200));
     }
 
     public void draw(SpriteBatch sb){
