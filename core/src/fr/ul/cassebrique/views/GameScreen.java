@@ -4,6 +4,7 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.ScreenAdapter;
+import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -25,20 +26,30 @@ public class GameScreen extends ScreenAdapter {
     private GameWorld gw;
     private SpriteBatch sb;
     private GameState gs;
-
+    private OrthographicCamera camera;
+    private Box2DDebugRenderer debugRenderer;
 
     public GameScreen(){
         gw = new GameWorld(this);
         sb = new SpriteBatch();
         gs = new GameState();
+        camera = new OrthographicCamera(Gdx.graphics.getWidth()*GameWorld.getPixelsToMeters(), Gdx.graphics.getHeight()*GameWorld.getPixelsToMeters());
+        camera.translate(new Vector2((Gdx.graphics.getWidth()/2)*GameWorld.getPixelsToMeters(), (Gdx.graphics.getHeight()/2)*GameWorld.getPixelsToMeters()));
+        debugRenderer = new Box2DDebugRenderer();
     }
 
     public void render(float delta){
         update();
-        gw.draw(sb);
+       // gw.draw(sb);
+        Gdx.gl.glClearColor(0, 0, 0, 1);
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+        camera.update();
+        sb.setProjectionMatrix(camera.combined);
+        debugRenderer.render(gw.getWorld(), camera.combined);
     }
 
     public void update(){
+        gw.update();
         if (Gdx.input.isTouched()){
             Racket racket = gw.getRacket();
             racket.moveTouch(Gdx.input.getX());

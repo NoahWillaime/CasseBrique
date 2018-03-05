@@ -4,6 +4,8 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 
+import java.util.ArrayList;
+
 import fr.ul.cassebrique.dataFactories.TextureFactory;
 
 /**
@@ -14,6 +16,7 @@ public class Wall {
     private int nbL; //Lignes
     private int nbC; //Colonnes
     private Brick[][] wall; //Mur du jeu
+    private ArrayList<Brick> tochange;
     private GameWorld gw;
     private Brick[][] wallInit;
 
@@ -28,6 +31,7 @@ public class Wall {
         this.nbL = wallInit.length;
         this.nbC = wallInit[0].length;
         this.wall = new Brick[nbL][nbC];
+        this.tochange = new ArrayList<Brick>();
         setBricks(false);
     }
 
@@ -41,6 +45,18 @@ public class Wall {
                 }
             }
         }
+    }
+
+    public void addChange(Brick change_b){
+        this.tochange.add(change_b);
+    }
+
+    public void majWall(){
+        System.out.println(tochange.size());
+        for (Brick b : tochange){
+            gw.getWorld().destroyBody(b.getBody());
+        }
+        tochange.clear();
     }
 
     public void draw(SpriteBatch sb){

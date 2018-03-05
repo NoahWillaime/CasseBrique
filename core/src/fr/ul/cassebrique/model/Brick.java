@@ -39,6 +39,7 @@ public abstract class Brick {
         fixtureDef.restitution = 1f;
         fixtureDef.friction = 0f;
         body.createFixture(fixtureDef);
+        body.setUserData(this);
         ps.dispose();
     }
 
@@ -46,12 +47,28 @@ public abstract class Brick {
         return nbCoups;
     }
 
-    public Vector2 getPos(){
+    public Vector2 getPosition(){
         return pos;
+    }
+
+    public Body getBody() {
+        return body;
+    }
+
+    public Vector2 getPos(){
+        return body.getPosition();
     }
 
     public void draw(SpriteBatch sb){
     }
+
+
+    /*
+    public boolean equals(Brick b){
+        if (b.getNbCoups() == this.nbCoups && b.getPos().x == this.pos.x && b.getPos().y == this.getPos().y)
+            return true;
+        return false;
+    }*/
     /*
     Vide(null),
     Bleue(TextureFactory.getTexBlueBrick()),

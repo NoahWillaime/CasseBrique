@@ -46,7 +46,6 @@ public class GameWorld {
                 if (obj2.getType() == BodyDef.BodyType.DynamicBody){
                     float scalp;
                     float restitution = obj1.getFixtureList().get(0).getRestitution();
-                    System.out.println(restitution);
                     Vector2 r = new Vector2();
                     Vector2 vitesse = obj2.getLinearVelocity();
                     scalp =-2*(vitesse.x * normal.x + vitesse.y * normal.y); //-2(d . n)
@@ -58,12 +57,13 @@ public class GameWorld {
                     r.y = (vitesse.y + r.y) * restitution;
                     //On applique r a la ball
                     obj2.setLinearVelocity(r);
+                    if (obj1.getUserData() instanceof Brick)
+                       wall.addChange((Brick)obj1.getUserData());
                 }
             }
 
             @Override
             public void endContact(Contact contact) {
-
             }
 
             @Override
@@ -120,6 +120,8 @@ public class GameWorld {
 
     public void update(){
         world.step(Gdx.graphics.getDeltaTime(),6, 2);
+        wall.majWall();
+        //System.out.println("fin du step");
     }
 
     public Racket getRacket(){
