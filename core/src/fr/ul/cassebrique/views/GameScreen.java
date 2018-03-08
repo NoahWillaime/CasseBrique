@@ -52,15 +52,15 @@ public class GameScreen extends ScreenAdapter {
         } else {
             if (gs.getState() == GameState.State.BallLoss){
                 sb.begin();
-                sb.draw(TextureFactory.getTexPerteBalle(), 600, 200);
+                sb.draw(TextureFactory.getTexPerteBalle(), 0, 0);
                 sb.end();
             } else if (gs.getState() == GameState.State.GameOver) {
                 sb.begin();
-                sb.draw(TextureFactory.getTexPerte(), 600, 200);
+                sb.draw(TextureFactory.getTexPerte(), 0, 0);
                 sb.end();
             } else if (gs.getState() == GameState.State.Won) {
                 sb.begin();
-                sb.draw(TextureFactory.getTexBravo(), 600, 200);
+                sb.draw(TextureFactory.getTexBravo(), 0, 0);
                 sb.end();
             }
             if (isTimerok) {
@@ -76,7 +76,13 @@ public class GameScreen extends ScreenAdapter {
     }
 
     public void restart(){
-        gw.restart(false);
+        if (gs.getState() == GameState.State.BallLoss)
+            gw.restart(false);
+        else if (gs.getState() == GameState.State.Won) {
+            gw.restart(true);
+        } else if (gs.getState() == GameState.State.GameOver){
+            gw.reset();
+        }
         gs.setState(GameState.State.Running);
     }
 
@@ -95,10 +101,12 @@ public class GameScreen extends ScreenAdapter {
         Ball b = gw.getBall();
         if (b != null) {
             if (b.isOut()) {
-                gs.setState(GameState.State.BallLoss);
+                if (gw.getNbBalls() == 1) {
+                    gs.setState(GameState.State.GameOver);
+                } else {
+                    gs.setState(GameState.State.BallLoss);
+                }
             }
-        } else {
-            gs.setState(GameState.State.GameOver);
         }
         if (gw.wallDestroy())
             gs.setState(GameState.State.Won);

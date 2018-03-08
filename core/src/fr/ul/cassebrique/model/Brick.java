@@ -43,6 +43,10 @@ public abstract class Brick {
         ps.dispose();
     }
 
+    public void dispose(){
+        gw.getWorld().destroyBody(body);
+    }
+
     public int getNbCoups() {
         return nbCoups;
     }

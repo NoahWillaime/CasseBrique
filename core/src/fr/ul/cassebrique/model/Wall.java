@@ -45,8 +45,16 @@ public class Wall {
             for (int i = 0; i < nbL; i++){
                 for (int j = 0; j < nbC; j++) {
                     wall[i][j] = wallInit[i][j];
-                    if (wall[i][j] == null)
+                    if (wallInit[i][j] == null) {
+                        wall[i][j] = wallInit[i][j];
                         comptVide++;
+                    } else {
+                        Vector2 pos = wallInit[i][j].getPosition();
+                        if (wallInit[i][j] instanceof BlueBrick)
+                            wall[i][j] = new BlueBrick(1, pos, gw);
+                        else
+                            wall[i][j] = new BlueBrick(wallInit[i][j].getNbCoups(), pos, gw);
+                    }
                 }
             }
         }
@@ -58,7 +66,7 @@ public class Wall {
 
     public void majWall(){
         for (Brick b : tochange){
-            gw.getWorld().destroyBody(b.getBody());
+            b.dispose();
             for (int i = 0; i < wall.length; i++){
                 for (int j = 0; j < wall[i].length; j++){
                     if (wall[i][j] != null){
@@ -76,6 +84,17 @@ public class Wall {
             }
         }
         tochange.clear();
+    }
+
+    public void reset(){
+        comptVide = 0;
+        for (int i = 0; i < wall.length; i++){
+            for (int j = 0; j < wall[i].length; j++) {
+                if (wall[i][j] != null)
+                    wall[i][j].dispose();
+            }
+        }
+        setBricks(false);
     }
 
     public boolean isDetroy(){

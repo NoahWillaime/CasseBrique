@@ -88,9 +88,7 @@ public class GameWorld {
         Vector2 pos1 = new Vector2();
         pos1.x = TextureFactory.getTexBack().getWidth();
         pos1.x -= TextureFactory.getTexBorder().getWidth()/2;
-        pos1.x -= TextureFactory.getTexBall().getWidth()/2;
         pos1.y = TextureFactory.getTexBorder().getHeight()/2;
-        pos1.y -= TextureFactory.getTexBall().getHeight()/2;
         balls.add(new Ball(this, pos1));
         Vector2 pos2 = new Vector2();
         pos2.x = pos1.x;
@@ -108,9 +106,8 @@ public class GameWorld {
         background.draw(sb);
         wall.draw(sb);
         racket.draw(sb);
-     /*   for (Ball b : balls)
-            b.draw(sb);*/
-        balls.get(balls.size()-1).draw(sb);
+        for (Ball b : balls)
+            b.draw(sb);
         update();
     }
 
@@ -130,14 +127,46 @@ public class GameWorld {
         }
     }
 
+    public void replaceAddBall(){
+        Ball delete = balls.get(balls.size()-1);
+        delete.deleteBody();
+        balls.remove(delete);
+        Vector2 newpos = new Vector2();
+        newpos.x = TextureFactory.getTexBack().getWidth();
+        newpos.x -= TextureFactory.getTexBorder().getWidth()/2;
+        newpos.y = (TextureFactory.getTexBorder().getHeight()/2);
+        if (getNbBalls() > 1){
+            newpos.y += TextureFactory.getTexBorder().getHeight() * getNbBalls();
+        }
+        balls.add(new Ball(this, newpos));
+        Vector2 pos3 = new Vector2();
+        pos3.x = getRacket().getPos().x + getRacket().getWidth()/2;
+        pos3.y = getRacket().getPos().y + getRacket().getHeight()+10;
+        pos3.y += TextureFactory.getTexBall().getHeight()/2;
+        balls.add(new Ball(this, pos3));
+        balls.get(getNbBalls()-1).setSpeed(new Vector2(-100, 200));
+    }
+
     public void restart(Boolean wall){
         if (!wall){ //bille perdue
             racket.clearBody();
             racket = new Racket(this);
             replaceBall();
         } else {
-
+            racket.clearBody();
+            racket = new Racket(this);
+            replaceAddBall();
+            this.wall.reset();
         }
+    }
+
+    public void reset(){
+        racket.clearBody();
+        racket = new Racket(this);
+        balls.clear();
+        balls = new ArrayList<Ball>(3);
+        setBalls();
+        this.wall.reset();
     }
 
     public World getWorld() {
@@ -161,6 +190,10 @@ public class GameWorld {
         if (balls.size() > 0)
             return balls.get(balls.size()-1);
         return null;
+    }
+
+    public int getNbBalls(){
+        return balls.size();
     }
 
     public static float getPixelsToMeters() {
