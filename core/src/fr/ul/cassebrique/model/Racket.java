@@ -128,6 +128,12 @@ public class Racket {
         }
     }
 
+    public void clearBody(){
+        gw.getWorld().destroyBody(this.bdroite);
+        gw.getWorld().destroyBody(this.bgauche);
+        gw.getWorld().destroyBody(this.bmillieu);
+    }
+
     public int getWidth() {
         return width;
     }
@@ -164,7 +170,4 @@ public class Racket {
         bmillieu.setTransform(pos, 0);
     }
 
-    public GameWorld getGw() {
-        return gw;
-    }
 }

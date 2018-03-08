@@ -4,15 +4,11 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.ScreenAdapter;
-import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
-
+import com.badlogic.gdx.utils.Timer;
 import fr.ul.cassebrique.dataFactories.TextureFactory;
 import fr.ul.cassebrique.model.Ball;
 import fr.ul.cassebrique.model.GameState;
@@ -27,6 +23,8 @@ public class GameScreen extends ScreenAdapter {
     private GameWorld gw;
     private SpriteBatch sb;
     private GameState gs;
+    private Timer.Task timer;
+    private Boolean isTimerok;
     private OrthographicCamera camera;
     private Box2DDebugRenderer debugRenderer;
 
@@ -34,24 +32,52 @@ public class GameScreen extends ScreenAdapter {
         gw = new GameWorld(this);
         sb = new SpriteBatch();
         gs = new GameState();
+        isTimerok = true;
+        timer = new Timer.Task() {
+            @Override
+            public void run() {
+                restart();
+                isTimerok = true;
+            }
+        };
         camera = new OrthographicCamera(Gdx.graphics.getWidth()*GameWorld.getPixelsToMeters(), Gdx.graphics.getHeight()*GameWorld.getPixelsToMeters());
         camera.translate(new Vector2((Gdx.graphics.getWidth()/2)*GameWorld.getPixelsToMeters(), (Gdx.graphics.getHeight()/2)*GameWorld.getPixelsToMeters()));
         debugRenderer = new Box2DDebugRenderer();
     }
 
-    public void render(float delta){
-        update();
-        gw.draw(sb);
-        if (gs.getState() == GameState.State.BallLoss){
-            sb.begin();
-            sb.draw(TextureFactory.getTexPerteBalle(), 600, 200);
-            sb.end();
+    public void render(float delta) {
+        if (gs.getState() == GameState.State.Running) {
+            update();
+            gw.draw(sb);
+        } else {
+            if (gs.getState() == GameState.State.BallLoss){
+                sb.begin();
+                sb.draw(TextureFactory.getTexPerteBalle(), 600, 200);
+                sb.end();
+            } else if (gs.getState() == GameState.State.GameOver) {
+                sb.begin();
+                sb.draw(TextureFactory.getTexPerte(), 600, 200);
+                sb.end();
+            } else if (gs.getState() == GameState.State.Won) {
+                sb.begin();
+                sb.draw(TextureFactory.getTexBravo(), 600, 200);
+                sb.end();
+            }
+            if (isTimerok) {
+                Timer.schedule(timer, 3);
+                isTimerok = false;
+            }
         }
         /*Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         camera.update();
         sb.setProjectionMatrix(camera.combined);
         debugRenderer.render(gw.getWorld(), camera.combined);*/
+    }
+
+    public void restart(){
+        gw.restart(false);
+        gs.setState(GameState.State.Running);
     }
 
     public void update() {
@@ -74,6 +100,8 @@ public class GameScreen extends ScreenAdapter {
         } else {
             gs.setState(GameState.State.GameOver);
         }
+        if (gw.wallDestroy())
+            gs.setState(GameState.State.Won);
     }
 
     public void dispose(){

@@ -110,7 +110,7 @@ public class GameWorld {
         racket.draw(sb);
      /*   for (Ball b : balls)
             b.draw(sb);*/
-        balls.get(2).draw(sb);
+        balls.get(balls.size()-1).draw(sb);
         update();
     }
 
@@ -130,6 +130,16 @@ public class GameWorld {
         }
     }
 
+    public void restart(Boolean wall){
+        if (!wall){ //bille perdue
+            racket.clearBody();
+            racket = new Racket(this);
+            replaceBall();
+        } else {
+
+        }
+    }
+
     public World getWorld() {
         return world;
     }
@@ -137,6 +147,10 @@ public class GameWorld {
     public void update(){
         world.step(Gdx.graphics.getDeltaTime(),6, 2);
         wall.majWall();
+    }
+
+    public Boolean wallDestroy(){
+        return wall.isDetroy();
     }
 
     public Racket getRacket(){
