@@ -114,6 +114,22 @@ public class GameWorld {
         update();
     }
 
+    public void replaceBall(){
+        Ball delete = balls.get(balls.size()-1); //Balle en jeu
+        delete.deleteBody();
+        balls.remove(delete);
+        if (balls.size() > 0) {
+            balls.remove(balls.size()-1); //Ball de la reserve
+            Vector2 pos = new Vector2();
+            pos.x = getRacket().getPos().x + getRacket().getWidth() / 2;
+            pos.y = getRacket().getPos().y + getRacket().getHeight() + 10;
+            pos.y += TextureFactory.getTexBall().getHeight() / 2;
+            Ball newBall =  new Ball(this, pos);
+            newBall.setSpeed(new Vector2(-100, 200));
+            balls.add(newBall);
+        }
+    }
+
     public World getWorld() {
         return world;
     }
@@ -121,15 +137,16 @@ public class GameWorld {
     public void update(){
         world.step(Gdx.graphics.getDeltaTime(),6, 2);
         wall.majWall();
-        //System.out.println("fin du step");
     }
 
     public Racket getRacket(){
         return racket;
     }
 
-    public Vector2 getBallPos(){
-        return balls.get(2).getPosBody();
+    public Ball getBall(){
+        if (balls.size() > 0)
+            return balls.get(balls.size()-1);
+        return null;
     }
 
     public static float getPixelsToMeters() {

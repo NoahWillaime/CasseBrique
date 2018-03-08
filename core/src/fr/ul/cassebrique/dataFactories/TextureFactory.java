@@ -15,6 +15,15 @@ public class TextureFactory {
     private static final Texture texBall = new Texture(Gdx.files.internal("images/Bille.png"));
     private static final Texture texBorder = new Texture(Gdx.files.internal("images/Contour.png"));
     private static final Texture texRacket = new Texture(Gdx.files.internal("images/Barre.png"));
+    private static final Texture texBravo = new Texture(Gdx.files.internal("images/Bravo.bmp"));
+    private static final Texture texPerteBalle = new Texture(Gdx.files.internal("images/PerteBalle.bmp"));
+    private static final Texture texPerte = new Texture(Gdx.files.internal("images/Perte.bmp"));
+
+    public static Texture getTexPerte() {return texPerte;}
+
+    public static Texture getTexPerteBalle() {return texPerteBalle;}
+
+    public static Texture getTexBravo() {return texBravo;}
 
     public static Texture getTexRacket() {
         return texRacket;

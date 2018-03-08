@@ -19,9 +19,11 @@ public class Wall {
     private ArrayList<Brick> tochange;
     private GameWorld gw;
     private Brick[][] wallInit;
+    private int comptVide;
 
     public Wall(GameWorld gaw){
         this.gw = gaw;
+        comptVide = 0;
         Brick[][] init = {{new BlueBrick(1, new Vector2(50,505), gw), new GreenBrick(2, new Vector2(150, 505), gw), new BlueBrick(1, new Vector2(250, 505), gw), new GreenBrick(1, new Vector2(350, 505), gw), new BlueBrick(1, new Vector2(450, 505), gw), new BlueBrick(1, new Vector2(550, 505), gw), new GreenBrick(1, new Vector2(650, 505), gw), new BlueBrick(1, new Vector2(750, 505), gw), new GreenBrick(2, new Vector2(850, 505), gw), new BlueBrick(1, new Vector2(950, 505), gw)},
                 {new BlueBrick(1, new Vector2(50, 460), gw), new BlueBrick(1, new Vector2(150, 460), gw), new GreenBrick(2, new Vector2(250, 460), gw), new BlueBrick(1, new Vector2(350, 460), gw), new GreenBrick(1, new Vector2(450, 460), gw), new GreenBrick(1, new Vector2(550, 460), gw), new BlueBrick(1, new Vector2(650, 460), gw), new GreenBrick(2, new Vector2(750, 460), gw), new BlueBrick(1, new Vector2(850, 460), gw), new BlueBrick(1, new Vector2(950, 460), gw)},
                 {new BlueBrick(1, new Vector2(50, 415), gw), new BlueBrick(1, new Vector2(150, 415), gw), new BlueBrick(1, new Vector2(250, 415), gw), new GreenBrick(2, new Vector2(350, 415), gw), new BlueBrick(1, new Vector2(450, 415), gw), new BlueBrick(1, new Vector2(550, 415), gw), new GreenBrick(2, new Vector2(650, 415), gw), new BlueBrick(1, new Vector2(750, 415), gw), new BlueBrick(1, new Vector2(850, 415), gw), new BlueBrick(1, new Vector2(950, 415), gw)},
@@ -42,6 +44,8 @@ public class Wall {
             for (int i = 0; i < nbL; i++){
                 for (int j = 0; j < nbC; j++) {
                     wall[i][j] = wallInit[i][j];
+                    if (wall[i][j] == null)
+                        comptVide++;
                 }
             }
         }
@@ -52,11 +56,31 @@ public class Wall {
     }
 
     public void majWall(){
-        System.out.println(tochange.size());
         for (Brick b : tochange){
             gw.getWorld().destroyBody(b.getBody());
+            for (int i = 0; i < wall.length; i++){
+                for (int j = 0; j < wall[i].length; j++){
+                    if (wall[i][j] != null){
+                        if (b.equals(wall[i][j])){
+                            if (wall[i][j].getNbCoups() == 1) {
+                                wall[i][j] = null;
+                                comptVide++;
+                            } else {
+                                Vector2 pos = new Vector2(wall[i][j].getPosition());
+                                wall[i][j] = new GreenBrick(1, pos, gw);
+                            }
+                        }
+                    }
+                }
+            }
         }
         tochange.clear();
+    }
+
+    public boolean isDetroy(){
+        if (comptVide == nbC*nbL)
+            return true;
+        return false;
     }
 
     public void draw(SpriteBatch sb){

@@ -65,4 +65,18 @@ public class Ball {
         v.y *= GameWorld.getPixelsToMeters();
         this.body.setLinearVelocity(v);
     }
+
+    public boolean isOut(){
+        Vector2 pos = getPosBody();
+        pos.y *= GameWorld.getMetersToPixels();
+        pos.y += TextureFactory.getTexBall().getHeight()/2;
+        if (pos.y < 0) {
+            return true;
+        }
+        return false;
+    }
+
+    public void deleteBody(){
+        gw.getWorld().destroyBody(body);
+    }
 }

@@ -14,6 +14,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 
 import fr.ul.cassebrique.dataFactories.TextureFactory;
+import fr.ul.cassebrique.model.Ball;
 import fr.ul.cassebrique.model.GameState;
 import fr.ul.cassebrique.model.GameWorld;
 import fr.ul.cassebrique.model.Racket;
@@ -40,25 +41,38 @@ public class GameScreen extends ScreenAdapter {
 
     public void render(float delta){
         update();
-       // gw.draw(sb);
-        Gdx.gl.glClearColor(0, 0, 0, 1);
+        gw.draw(sb);
+        if (gs.getState() == GameState.State.BallLoss){
+            sb.begin();
+            sb.draw(TextureFactory.getTexPerteBalle(), 600, 200);
+            sb.end();
+        }
+        /*Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         camera.update();
         sb.setProjectionMatrix(camera.combined);
-        debugRenderer.render(gw.getWorld(), camera.combined);
+        debugRenderer.render(gw.getWorld(), camera.combined);*/
     }
 
-    public void update(){
+    public void update() {
         gw.update();
-        if (Gdx.input.isTouched()){
+        if (Gdx.input.isTouched()) {
             Racket racket = gw.getRacket();
             racket.moveTouch(Gdx.input.getX());
-        } else if (Gdx.input.isKeyPressed(Input.Keys.LEFT)){
+        } else if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
             Racket racket = gw.getRacket();
             racket.moveLeft();
-        } else if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)){
+        } else if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
             Racket racket = gw.getRacket();
             racket.moveRight();
+        }
+        Ball b = gw.getBall();
+        if (b != null) {
+            if (b.isOut()) {
+                gs.setState(GameState.State.BallLoss);
+            }
+        } else {
+            gs.setState(GameState.State.GameOver);
         }
     }
 
