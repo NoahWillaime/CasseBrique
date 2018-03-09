@@ -11,7 +11,7 @@ public class GameState {
         GameOver,
         Won,
         Pause,
-        Quit;
+        Quit
     }
 
     private State state;

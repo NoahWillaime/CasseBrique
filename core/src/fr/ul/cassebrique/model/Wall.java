@@ -1,6 +1,5 @@
 package fr.ul.cassebrique.model;
 
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 
@@ -98,9 +97,7 @@ public class Wall {
     }
 
     public boolean isDetroy(){
-        if (comptVide == nbC*nbL)
-            return true;
-        return false;
+        return comptVide == nbC * nbL;
     }
 
     public void draw(SpriteBatch sb){

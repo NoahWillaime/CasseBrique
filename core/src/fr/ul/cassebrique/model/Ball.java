@@ -71,10 +71,7 @@ public class Ball {
         Vector2 pos = getPosBody();
         pos.y *= GameWorld.getMetersToPixels();
         pos.y += TextureFactory.getTexBall().getHeight()/2;
-        if (pos.y < 0) {
-            return true;
-        }
-        return false;
+        return pos.y < 0;
     }
 
     public void deleteBody(){

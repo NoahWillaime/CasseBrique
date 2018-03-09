@@ -3,8 +3,6 @@ package fr.ul.cassebrique.controls;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 
-import java.security.Key;
-
 import fr.ul.cassebrique.model.GameState;
 import fr.ul.cassebrique.views.GameScreen;
 
