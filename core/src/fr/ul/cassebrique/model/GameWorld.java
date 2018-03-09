@@ -25,7 +25,7 @@ import fr.ul.cassebrique.views.GameScreen;
 public class GameWorld {
     private static float METERS_TO_PIXELS = 250f;
     private static float PIXELS_TO_METERS = 1f/METERS_TO_PIXELS;
-    private static Vector2 VITESSE_INITIAL = new Vector2(-50, 100);
+    private static Vector2 VITESSE_INITIAL = new Vector2(0, 200);
 
     private World world;
     private GameScreen gs;
@@ -46,12 +46,12 @@ public class GameWorld {
                 Vector2 r = new Vector2();
                 float scalp;
                 if (obj2.getType() == BodyDef.BodyType.DynamicBody){
+                    Vector2 vitesse = obj2.getLinearVelocity();
                     if (obj1.getUserData().equals("bracket") || obj1.getUserData().equals("bmillieu"))
                         SoundFactory.listenImpact(0.3f);
                     else
                         SoundFactory.listenColision(0.3f);
                     float restitution = obj1.getFixtureList().get(0).getRestitution();
-                    Vector2 vitesse = obj2.getLinearVelocity();
                     scalp =-2*(vitesse.x * normal.x + vitesse.y * normal.y);
                     r.x = (scalp * normal.x + vitesse.x) * restitution;
                     r.y = (scalp * normal.y + vitesse.y) * restitution;
@@ -60,10 +60,10 @@ public class GameWorld {
                     if (obj1.getUserData() instanceof Brick)
                        wall.addChange((Brick)obj1.getUserData());
                     else if (obj1.getUserData().equals("bracket")) {
-                        if (r.x < 0)
-                            r.x *= 1.5f ;
+                        r.x *= 1.5f ;
                     }
                     obj2.setLinearVelocity(r);
+                    System.out.println(r);
                 } else if (obj1.getType() == BodyDef.BodyType.DynamicBody) {
                     if (obj1.getUserData().equals("bracket") || obj1.getUserData().equals("bmillieu"))
                         SoundFactory.listenImpact(0.3f);
@@ -79,8 +79,7 @@ public class GameWorld {
                     if (obj2.getUserData() instanceof Brick)
                         wall.addChange((Brick)obj2.getUserData());
                     else if (obj2.getUserData().equals("bracket")){
-                        if (r.x < 0)
-                            r.x *= 1.5f ;
+                        r.x *= 1.5f ;
                     }
                     obj1.setLinearVelocity(r);
                 }
