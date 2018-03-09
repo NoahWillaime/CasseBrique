@@ -9,6 +9,11 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.utils.Timer;
+import com.badlogic.gdx.utils.viewport.FitViewport;
+import com.badlogic.gdx.utils.viewport.Viewport;
+
+import fr.ul.cassebrique.controls.Listener;
+import fr.ul.cassebrique.dataFactories.SoundFactory;
 import fr.ul.cassebrique.dataFactories.TextureFactory;
 import fr.ul.cassebrique.model.Ball;
 import fr.ul.cassebrique.model.GameState;
@@ -27,11 +32,15 @@ public class GameScreen extends ScreenAdapter {
     private Boolean isTimerok;
     private OrthographicCamera camera;
     private Box2DDebugRenderer debugRenderer;
+    private Viewport vp;
+    private Listener listener;
 
     public GameScreen(){
         gw = new GameWorld(this);
         sb = new SpriteBatch();
         gs = new GameState();
+        listener = new Listener(this);
+        Gdx.input.setInputProcessor(listener);
         isTimerok = true;
         timer = new Timer.Task() {
             @Override
@@ -40,39 +49,42 @@ public class GameScreen extends ScreenAdapter {
                 isTimerok = true;
             }
         };
-        camera = new OrthographicCamera(Gdx.graphics.getWidth()*GameWorld.getPixelsToMeters(), Gdx.graphics.getHeight()*GameWorld.getPixelsToMeters());
-        camera.translate(new Vector2((Gdx.graphics.getWidth()/2)*GameWorld.getPixelsToMeters(), (Gdx.graphics.getHeight()/2)*GameWorld.getPixelsToMeters()));
+        camera = new OrthographicCamera(TextureFactory.getTexBack().getWidth(), TextureFactory.getTexBack().getHeight());
+        vp = new FitViewport(TextureFactory.getTexBack().getWidth(), TextureFactory.getTexBack().getHeight(), camera);
+        vp.apply();
+        camera.position.set(camera.viewportWidth/2, camera.viewportHeight/2, 0);
         debugRenderer = new Box2DDebugRenderer();
     }
 
     public void render(float delta) {
+        camera.update();
+        sb.setProjectionMatrix(camera.combined);
         if (gs.getState() == GameState.State.Running) {
             update();
             gw.draw(sb);
+        } else if (gs.getState() == GameState.State.Pause) {
+            gw.draw(sb);
+        } else if (gs.getState() == GameState.State.Quit){
+            Gdx.app.exit();
         } else {
+            gw.draw(sb);
+            sb.begin();
             if (gs.getState() == GameState.State.BallLoss){
-                sb.begin();
                 sb.draw(TextureFactory.getTexPerteBalle(), 0, 0);
-                sb.end();
             } else if (gs.getState() == GameState.State.GameOver) {
-                sb.begin();
                 sb.draw(TextureFactory.getTexPerte(), 0, 0);
-                sb.end();
             } else if (gs.getState() == GameState.State.Won) {
-                sb.begin();
                 sb.draw(TextureFactory.getTexBravo(), 0, 0);
-                sb.end();
             }
+            sb.end();
             if (isTimerok) {
                 Timer.schedule(timer, 3);
                 isTimerok = false;
             }
         }
         /*Gdx.gl.glClearColor(0, 0, 0, 1);
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-        camera.update();
-        sb.setProjectionMatrix(camera.combined);
-        debugRenderer.render(gw.getWorld(), camera.combined);*/
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);*/
+        /*debugRenderer.render(gw.getWorld(), camera.combined);*/
     }
 
     public void restart(){
@@ -88,9 +100,10 @@ public class GameScreen extends ScreenAdapter {
 
     public void update() {
         gw.update();
+        float ratio = (float)TextureFactory.getTexBack().getWidth() / (float)Gdx.graphics.getWidth();
         if (Gdx.input.isTouched()) {
             Racket racket = gw.getRacket();
-            racket.moveTouch(Gdx.input.getX());
+            racket.moveTouch(Gdx.input.getX() * ratio);
         } else if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
             Racket racket = gw.getRacket();
             racket.moveLeft();
@@ -102,14 +115,32 @@ public class GameScreen extends ScreenAdapter {
         if (b != null) {
             if (b.isOut()) {
                 if (gw.getNbBalls() == 1) {
+                    SoundFactory.listenPerte(0.3f);
                     gs.setState(GameState.State.GameOver);
                 } else {
+                    SoundFactory.listenPerteBalle(0.3f);
                     gs.setState(GameState.State.BallLoss);
                 }
             }
         }
-        if (gw.wallDestroy())
+        if (gw.wallDestroy()) {
+            SoundFactory.listenVictoire(0.3f);
             gs.setState(GameState.State.Won);
+        }
+    }
+
+    @Override
+    public void resize(int width, int height){
+        vp.update(width, height);
+        camera.position.set(camera.viewportWidth/2, camera.viewportHeight/2, 0);
+    }
+
+    public void setState(GameState.State state){
+        gs.setState(state);
+    }
+
+    public GameState.State getCurrentState(){
+        return this.gs.getState();
     }
 
     public void dispose(){

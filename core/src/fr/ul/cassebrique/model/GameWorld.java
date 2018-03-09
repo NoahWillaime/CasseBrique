@@ -16,6 +16,7 @@ import com.badlogic.gdx.physics.box2d.WorldManifold;
 import java.util.ArrayList;
 import java.util.Vector;
 
+import fr.ul.cassebrique.dataFactories.SoundFactory;
 import fr.ul.cassebrique.dataFactories.TextureFactory;
 import fr.ul.cassebrique.views.GameScreen;
 
@@ -26,6 +27,7 @@ import fr.ul.cassebrique.views.GameScreen;
 public class GameWorld {
     private static float METERS_TO_PIXELS = 250f;
     private static float PIXELS_TO_METERS = 1f/METERS_TO_PIXELS;
+    private static Vector2 VITESSE_INITIAL = new Vector2(-50, 100);
 
     private World world;
     private GameScreen gs;
@@ -43,22 +45,46 @@ public class GameWorld {
                 Vector2 normal = wm.getNormal();
                 Body obj1 = contact.getFixtureA().getBody();
                 Body obj2 = contact.getFixtureB().getBody();
+                Vector2 r = new Vector2();
+                float scalp;
                 if (obj2.getType() == BodyDef.BodyType.DynamicBody){
-                    float scalp;
+                    if (obj1.getUserData().equals("bracket") || obj1.getUserData().equals("bmillieu"))
+                        SoundFactory.listenImpact(0.3f);
+                    else
+                        SoundFactory.listenColision(0.3f);
                     float restitution = obj1.getFixtureList().get(0).getRestitution();
-                    Vector2 r = new Vector2();
                     Vector2 vitesse = obj2.getLinearVelocity();
-                    scalp =-2*(vitesse.x * normal.x + vitesse.y * normal.y); //-2(d . n)
-                    //-2(d . n)n
-                    r.x = scalp * normal.x;
-                    r.y = scalp * normal.y;
-                    //-2(d . n)n + d
-                    r.x = (vitesse.x + r.x) * restitution;
-                    r.y = (vitesse.y + r.y) * restitution;
-                    //On applique r a la ball
-                    obj2.setLinearVelocity(r);
+                    scalp =-2*(vitesse.x * normal.x + vitesse.y * normal.y);
+                    r.x = (scalp * normal.x + vitesse.x) * restitution;
+                    r.y = (scalp * normal.y + vitesse.y) * restitution;
+                    if (r.y < 0 && vitesse.y > 0)
+                        r.y += r.y * (1f/100f);
                     if (obj1.getUserData() instanceof Brick)
                        wall.addChange((Brick)obj1.getUserData());
+                    else if (obj1.getUserData().equals("bracket")) {
+                        if (r.x < 0)
+                            r.x *= 1.5f ;
+                    }
+                    obj2.setLinearVelocity(r);
+                } else if (obj1.getType() == BodyDef.BodyType.DynamicBody) {
+                    if (obj1.getUserData().equals("bracket") || obj1.getUserData().equals("bmillieu"))
+                        SoundFactory.listenImpact(0.3f);
+                    else
+                        SoundFactory.listenColision(0.3f);
+                    float restitution = obj2.getFixtureList().get(0).getRestitution();
+                    Vector2 vitesse = obj1.getLinearVelocity();
+                    scalp =-2*(vitesse.x * normal.x + vitesse.y * normal.y);
+                    r.x = (scalp * normal.x + vitesse.x) * restitution;
+                    r.y = (scalp * normal.y + vitesse.y) * restitution;
+                    if (r.y < 0 && vitesse.y > 0)
+                        r.y += r.y * (1f/100f);
+                    if (obj2.getUserData() instanceof Brick)
+                        wall.addChange((Brick)obj2.getUserData());
+                    else if (obj2.getUserData().equals("bracket")){
+                        if (r.x < 0)
+                            r.x *= 1.5f ;
+                    }
+                    obj1.setLinearVelocity(r);
                 }
             }
 
@@ -99,7 +125,7 @@ public class GameWorld {
         pos3.y = getRacket().getPos().y + getRacket().getHeight()+10;
         pos3.y += TextureFactory.getTexBall().getHeight()/2;
         balls.add(new Ball(this, pos3));
-        balls.get(2).setSpeed(new Vector2(-100, 200));
+        balls.get(getNbBalls()-1).setSpeed(new Vector2(VITESSE_INITIAL.x, VITESSE_INITIAL.y));
     }
 
     public void draw(SpriteBatch sb){
@@ -108,7 +134,7 @@ public class GameWorld {
         racket.draw(sb);
         for (Ball b : balls)
             b.draw(sb);
-        update();
+     //   update();
     }
 
     public void replaceBall(){
@@ -122,7 +148,7 @@ public class GameWorld {
             pos.y = getRacket().getPos().y + getRacket().getHeight() + 10;
             pos.y += TextureFactory.getTexBall().getHeight() / 2;
             Ball newBall =  new Ball(this, pos);
-            newBall.setSpeed(new Vector2(-100, 200));
+            newBall.setSpeed(new Vector2(VITESSE_INITIAL.x, VITESSE_INITIAL.y));
             balls.add(newBall);
         }
     }
@@ -144,7 +170,7 @@ public class GameWorld {
         pos3.y = getRacket().getPos().y + getRacket().getHeight()+10;
         pos3.y += TextureFactory.getTexBall().getHeight()/2;
         balls.add(new Ball(this, pos3));
-        balls.get(getNbBalls()-1).setSpeed(new Vector2(-100, 200));
+        balls.get(getNbBalls()-1).setSpeed(new Vector2(VITESSE_INITIAL.x, VITESSE_INITIAL.y));
     }
 
     public void restart(Boolean wall){
@@ -152,7 +178,7 @@ public class GameWorld {
             racket.clearBody();
             racket = new Racket(this);
             replaceBall();
-        } else {
+        } else { //Mur détruit
             racket.clearBody();
             racket = new Racket(this);
             replaceAddBall();

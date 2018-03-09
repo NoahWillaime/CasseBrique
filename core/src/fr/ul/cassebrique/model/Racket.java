@@ -77,6 +77,9 @@ public class Racket {
         fixtureDef2.friction = 0f;
         bmillieu.createFixture(fixtureDef2);
         ps.dispose();
+        bgauche.setUserData("bracket");
+        bdroite.setUserData("bracket");
+        bmillieu.setUserData("bmillieu");
     }
 
     public void draw(SpriteBatch sb){
@@ -90,7 +93,7 @@ public class Racket {
         sb.end();
     }
 
-    public void moveTouch(int x){
+    public void moveTouch(float x){
         if ( x < getPosGauche().x*GameWorld.getMetersToPixels()){ //Superieur a Racket : Droite, Inferieur : Gauche
             //aller a gauche
             moveLeft();

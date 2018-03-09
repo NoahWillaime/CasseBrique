@@ -43,6 +43,7 @@ public class Ball {
         shape.dispose();
         //
         body.setTransform(pos_phy, 0);
+        body.setUserData("bille");
     }
 
     public Vector2 getPosBody(){

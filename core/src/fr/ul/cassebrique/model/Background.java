@@ -49,6 +49,7 @@ public class Background {
         fixtureDef.friction = 0f;
         body.createFixture(fixtureDef);
         chainShape.dispose();
+        body.setUserData("background");
     }
 
     public Vector2 getPosBody(){
