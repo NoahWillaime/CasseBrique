@@ -94,35 +94,35 @@ public class Racket {
     public void moveTouch(float x){
         if ( x < getPosGauche().x*GameWorld.getMetersToPixels()){ //Superieur a Racket : Droite, Inferieur : Gauche
             //aller a gauche
-            moveLeft();
+            moveLeft(100);
         } else if (x > getPosDroite().x*GameWorld.getMetersToPixels()) {
             //aller a droite
-           moveRight();
+           moveRight(100);
         }
     }
 
-    public void moveRight(){
+    public void moveRight(float modif){
         Vector2 posd = getPosDroite();
         if ((posd.x*GameWorld.getMetersToPixels())+ 10 < TextureFactory.getTexBack().getWidth()-(TextureFactory.getTexBorder().getWidth() * 2)) {
-            posd.x += 10*GameWorld.getPixelsToMeters();
+            posd.x += (10 * modif/100f)*GameWorld.getPixelsToMeters();
             Vector2 posg = getPosGauche();
-            posg.x += 10*GameWorld.getPixelsToMeters();
+            posg.x += (10 * modif/100f)*GameWorld.getPixelsToMeters();
             Vector2 posm = getPosMillieu();
-            posm.x += 10*GameWorld.getPixelsToMeters();
+            posm.x += (10 * modif/100f)*GameWorld.getPixelsToMeters();
             setPosDroite(posd);
             setPosGauche(posg);
             setPosMillieu(posm);
         }
     }
 
-    public void moveLeft(){
+    public void moveLeft(float modif){
         Vector2 posg = getPosGauche();
         if ((posg.x*GameWorld.getMetersToPixels()) - 10 > TextureFactory.getTexBorder().getWidth()){
-            posg.x -= 10*GameWorld.getPixelsToMeters();
+            posg.x -= (10 * modif/100f)*GameWorld.getPixelsToMeters();
             Vector2 posd = getPosDroite();
-            posd.x -= 10*GameWorld.getPixelsToMeters();
+            posd.x -= (10 * modif/100f)*GameWorld.getPixelsToMeters();
             Vector2 posm = getPosMillieu();
-            posm.x -= 10*GameWorld.getPixelsToMeters();
+            posm.x -= (10 * modif/100f)*GameWorld.getPixelsToMeters();
             setPosDroite(posd);
             setPosGauche(posg);
             setPosMillieu(posm);

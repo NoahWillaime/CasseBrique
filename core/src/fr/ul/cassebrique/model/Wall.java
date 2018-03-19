@@ -23,12 +23,12 @@ public class Wall {
     public Wall(GameWorld gaw){
         this.gw = gaw;
         comptVide = 0;
-        Brick[][] init = {//{new BlueBrick(1, new Vector2(50,505), gw), new GreenBrick(2, new Vector2(150, 505), gw), new BlueBrick(1, new Vector2(250, 505), gw), new GreenBrick(1, new Vector2(350, 505), gw), new BlueBrick(1, new Vector2(450, 505), gw), new BlueBrick(1, new Vector2(550, 505), gw), new GreenBrick(1, new Vector2(650, 505), gw), new BlueBrick(1, new Vector2(750, 505), gw), new GreenBrick(2, new Vector2(850, 505), gw), new BlueBrick(1, new Vector2(950, 505), gw)},
-                //{new BlueBrick(1, new Vector2(50, 460), gw), new BlueBrick(1, new Vector2(150, 460), gw), new GreenBrick(2, new Vector2(250, 460), gw), new BlueBrick(1, new Vector2(350, 460), gw), new GreenBrick(1, new Vector2(450, 460), gw), new GreenBrick(1, new Vector2(550, 460), gw), new BlueBrick(1, new Vector2(650, 460), gw), new GreenBrick(2, new Vector2(750, 460), gw), new BlueBrick(1, new Vector2(850, 460), gw), new BlueBrick(1, new Vector2(950, 460), gw)},
-                //{new BlueBrick(1, new Vector2(50, 415), gw), new BlueBrick(1, new Vector2(150, 415), gw), new BlueBrick(1, new Vector2(250, 415), gw), new GreenBrick(2, new Vector2(350, 415), gw), new BlueBrick(1, new Vector2(450, 415), gw), new BlueBrick(1, new Vector2(550, 415), gw), new GreenBrick(2, new Vector2(650, 415), gw), new BlueBrick(1, new Vector2(750, 415), gw), new BlueBrick(1, new Vector2(850, 415), gw), new BlueBrick(1, new Vector2(950, 415), gw)},
-                //{new BlueBrick(1, new Vector2(50, 370), gw), new BlueBrick(1, new Vector2(150, 370), gw), new BlueBrick(1, new Vector2(250, 370), gw), new BlueBrick(1, new Vector2(350, 370), gw), new GreenBrick(2, new Vector2(450, 370), gw), new GreenBrick(2, new Vector2(550, 370), gw), new BlueBrick(1, new Vector2(650, 370), gw), new BlueBrick(1, new Vector2(750, 370), gw), new BlueBrick(1, new Vector2(850, 370), gw), new BlueBrick(1, new Vector2(950, 370), gw)},
+        Brick[][] init = {{new BlueBrick(1, new Vector2(50,505), gw), new GreenBrick(2, new Vector2(150, 505), gw), new BlueBrick(1, new Vector2(250, 505), gw), new GreenBrick(1, new Vector2(350, 505), gw), new BlueBrick(1, new Vector2(450, 505), gw), new BlueBrick(1, new Vector2(550, 505), gw), new GreenBrick(1, new Vector2(650, 505), gw), new BlueBrick(1, new Vector2(750, 505), gw), new GreenBrick(2, new Vector2(850, 505), gw), new BlueBrick(1, new Vector2(950, 505), gw)},
+                {new BlueBrick(1, new Vector2(50, 460), gw), new BlueBrick(1, new Vector2(150, 460), gw), new GreenBrick(2, new Vector2(250, 460), gw), new BlueBrick(1, new Vector2(350, 460), gw), new GreenBrick(1, new Vector2(450, 460), gw), new GreenBrick(1, new Vector2(550, 460), gw), new BlueBrick(1, new Vector2(650, 460), gw), new GreenBrick(2, new Vector2(750, 460), gw), new BlueBrick(1, new Vector2(850, 460), gw), new BlueBrick(1, new Vector2(950, 460), gw)},
+                {new BlueBrick(1, new Vector2(50, 415), gw), new BlueBrick(1, new Vector2(150, 415), gw), new BlueBrick(1, new Vector2(250, 415), gw), new GreenBrick(2, new Vector2(350, 415), gw), new BlueBrick(1, new Vector2(450, 415), gw), new BlueBrick(1, new Vector2(550, 415), gw), new GreenBrick(2, new Vector2(650, 415), gw), new BlueBrick(1, new Vector2(750, 415), gw), new BlueBrick(1, new Vector2(850, 415), gw), new BlueBrick(1, new Vector2(950, 415), gw)},
+                {new BlueBrick(1, new Vector2(50, 370), gw), new BlueBrick(1, new Vector2(150, 370), gw), new BlueBrick(1, new Vector2(250, 370), gw), new BlueBrick(1, new Vector2(350, 370), gw), new GreenBrick(2, new Vector2(450, 370), gw), new GreenBrick(2, new Vector2(550, 370), gw), new BlueBrick(1, new Vector2(650, 370), gw), new BlueBrick(1, new Vector2(750, 370), gw), new BlueBrick(1, new Vector2(850, 370), gw), new BlueBrick(1, new Vector2(950, 370), gw)},
                 {null, new BlueBrick(1, new Vector2(150, 325), gw), null, null, new BlueBrick(1, new Vector2(450, 325), gw), new BlueBrick(1, new Vector2(550, 325), gw), null, null, new BlueBrick(1, new Vector2(850, 325), gw), null}};
-              //  {{null, null, null, null, new BlueBrick(1, new Vector2(450, 325), gw), null, null, null, null}};
+               // {null, null, null, null, new BlueBrick(1, new Vector2(450, 325), gw), null, null, null, null}};
         wallInit = init;
         this.nbL = wallInit.length;
         this.nbC = wallInit[0].length;
@@ -43,17 +43,17 @@ public class Wall {
         } else {
             for (int i = 0; i < nbL; i++){
                 for (int j = 0; j < nbC; j++) {
-                    wall[i][j] = wallInit[i][j];
+                   // wall[i][j] = wallInit[i][j];
                     if (wallInit[i][j] == null) {
-                  //      wall[i][j] = wallInit[i][j];
+                        wall[i][j] = wallInit[i][j];
                         comptVide++;
-                    } /*else {
+                    } else {
                         Vector2 pos = wallInit[i][j].getPosition();
                         if (wallInit[i][j] instanceof BlueBrick)
                             wall[i][j] = new BlueBrick(1, pos, gw);
                         else
-                            wall[i][j] = new BlueBrick(wallInit[i][j].getNbCoups(), pos, gw);
-                    }*/
+                            wall[i][j] = new GreenBrick(wallInit[i][j].getNbCoups(), pos, gw);
+                    }
                 }
             }
         }

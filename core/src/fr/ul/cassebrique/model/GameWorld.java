@@ -25,7 +25,7 @@ import fr.ul.cassebrique.views.GameScreen;
 public class GameWorld {
     private static float METERS_TO_PIXELS = 250f;
     private static float PIXELS_TO_METERS = 1f/METERS_TO_PIXELS;
-    private static Vector2 VITESSE_INITIAL = new Vector2(0, 200);
+    private static Vector2 VITESSE_INITIAL = new Vector2(100, 200);
 
     private World world;
     private GameScreen gs;
@@ -47,10 +47,6 @@ public class GameWorld {
                 float scalp;
                 if (obj2.getType() == BodyDef.BodyType.DynamicBody){
                     Vector2 vitesse = obj2.getLinearVelocity();
-                    if (obj1.getUserData().equals("bracket") || obj1.getUserData().equals("bmillieu"))
-                        SoundFactory.listenImpact(0.3f);
-                    else
-                        SoundFactory.listenColision(0.3f);
                     float restitution = obj1.getFixtureList().get(0).getRestitution();
                     scalp =-2*(vitesse.x * normal.x + vitesse.y * normal.y);
                     r.x = (scalp * normal.x + vitesse.x) * restitution;
@@ -62,8 +58,13 @@ public class GameWorld {
                     else if (obj1.getUserData().equals("bracket")) {
                         r.x *= 1.5f ;
                     }
-                    obj2.setLinearVelocity(r);
-                    System.out.println(r);
+                    if (scalp > 0) {
+                        if (obj1.getUserData().equals("bracket") || obj1.getUserData().equals("bmillieu"))
+                            SoundFactory.listenImpact(0.3f);
+                        else
+                            SoundFactory.listenColision(0.3f);
+                        obj2.setLinearVelocity(r);
+                    }
                 } else if (obj1.getType() == BodyDef.BodyType.DynamicBody) {
                     if (obj1.getUserData().equals("bracket") || obj1.getUserData().equals("bmillieu"))
                         SoundFactory.listenImpact(0.3f);
