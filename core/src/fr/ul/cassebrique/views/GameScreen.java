@@ -99,15 +99,28 @@ public class GameScreen extends ScreenAdapter {
     public void update() {
         gw.update();
         float ratio = (float)TextureFactory.getTexBack().getWidth() / (float)Gdx.graphics.getWidth();
-        if (Gdx.input.isTouched()) {
+        boolean screenTouch = Gdx.input.isTouched();
+        boolean leftTouch = Gdx.input.isKeyPressed(Input.Keys.LEFT);
+        boolean rightTouch = Gdx.input.isKeyPressed(Input.Keys.RIGHT);
+        float acY = Gdx.input.getAccelerometerY();
+        if (acY != 0 && !screenTouch && !leftTouch && !rightTouch){
             Racket racket = gw.getRacket();
-            racket.moveTouch(Gdx.input.getX() * ratio);
-        } else if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
-            Racket racket = gw.getRacket();
-            racket.moveLeft();
-        } else if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
-            Racket racket = gw.getRacket();
-            racket.moveRight();
+            int orientation = Gdx.input.getRotation();
+            if (acY < 0)
+                racket.moveLeft(orientation);
+            else
+                racket.moveRight(orientation);
+        } else {
+            if (screenTouch) {
+                Racket racket = gw.getRacket();
+                racket.moveTouch(Gdx.input.getX() * ratio);
+            } else if (leftTouch) {
+                Racket racket = gw.getRacket();
+                racket.moveLeft(100);
+            } else if (rightTouch) {
+                Racket racket = gw.getRacket();
+                racket.moveRight(100);
+            }
         }
         Ball b = gw.getBall();
         if (b != null) {
