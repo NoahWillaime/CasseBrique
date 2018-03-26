@@ -18,6 +18,9 @@ public class TextureFactory {
     private static final Texture texBravo = new Texture(Gdx.files.internal("images/Bravo.bmp"));
     private static final Texture texPerteBalle = new Texture(Gdx.files.internal("images/PerteBalle.bmp"));
     private static final Texture texPerte = new Texture(Gdx.files.internal("images/Perte.bmp"));
+    private static final Texture texBoule = new Texture(Gdx.files.internal("badlogic.jpg"));
+
+    public static Texture getTexBoule() {return texBoule;}
 
     public static Texture getTexPerte() {return texPerte;}
 

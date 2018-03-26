@@ -1,6 +1,7 @@
 package fr.ul.cassebrique.model;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
@@ -122,7 +123,7 @@ public class GameWorld {
         pos3.x = getRacket().getPos().x + getRacket().getWidth()/2;
         pos3.y = getRacket().getPos().y + getRacket().getHeight()+10;
         pos3.y += TextureFactory.getTexBall().getHeight()/2;
-        balls.add(new Ball(this, pos3));
+        balls.add(new Ball3D(this, pos3));
         balls.get(getNbBalls()-1).setSpeed(new Vector2(VITESSE_INITIAL.x, VITESSE_INITIAL.y));
     }
 
@@ -132,7 +133,6 @@ public class GameWorld {
         racket.draw(sb);
         for (Ball b : balls)
             b.draw(sb);
-     //   update();
     }
 
     public void replaceBall(){
@@ -214,6 +214,10 @@ public class GameWorld {
         if (balls.size() > 0)
             return balls.get(balls.size()-1);
         return null;
+    }
+
+    public OrthographicCamera getCamera(){
+        return gs.getCamera();
     }
 
     public int getNbBalls(){

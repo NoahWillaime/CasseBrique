@@ -14,9 +14,9 @@ import fr.ul.cassebrique.dataFactories.TextureFactory;
  */
 
 public class Ball {
-    private Body body;
-    private static float rayon = 12;
-    private GameWorld gw;
+    protected Body body;
+    protected static float rayon = 12;
+    protected GameWorld gw;
   //  private Vector2 pos;
 
     public Ball(GameWorld gaw, Vector2 pos){

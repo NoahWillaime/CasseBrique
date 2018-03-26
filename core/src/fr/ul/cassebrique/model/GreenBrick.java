@@ -29,9 +29,9 @@ public class GreenBrick extends Brick {
     @Override
     public void draw(SpriteBatch sb) {
         tempsAnime += Gdx.graphics.getDeltaTime();
+        Vector2 pos = getPosition();
         sb.begin();
         if (nbCoups == 2){
-            System.out.print(tempsAnime);
             TextureRegion image = anim.getKeyFrame(tempsAnime);
             sb.draw(image, pos.x, pos.y);
         } else if (nbCoups == 1){

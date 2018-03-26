@@ -3,8 +3,17 @@ package fr.ul.cassebrique.views;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.ScreenAdapter;
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.VertexAttributes;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g3d.Material;
+import com.badlogic.gdx.graphics.g3d.Model;
+import com.badlogic.gdx.graphics.g3d.ModelBatch;
+import com.badlogic.gdx.graphics.g3d.ModelInstance;
+import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute;
+import com.badlogic.gdx.graphics.g3d.utils.ModelBuilder;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.utils.Timer;
 import com.badlogic.gdx.utils.viewport.FitViewport;
@@ -47,7 +56,7 @@ public class GameScreen extends ScreenAdapter {
                 isTimerok = true;
             }
         };
-        camera = new OrthographicCamera(TextureFactory.getTexBack().getWidth(), TextureFactory.getTexBack().getHeight());
+       camera = new OrthographicCamera(TextureFactory.getTexBack().getWidth(), TextureFactory.getTexBack().getHeight());
         vp = new FitViewport(TextureFactory.getTexBack().getWidth(), TextureFactory.getTexBack().getHeight(), camera);
         vp.apply();
         camera.position.set(camera.viewportWidth/2, camera.viewportHeight/2, 0);
@@ -80,9 +89,7 @@ public class GameScreen extends ScreenAdapter {
                 isTimerok = false;
             }
         }
-        /*Gdx.gl.glClearColor(0, 0, 0, 1);
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);*/
-        /*debugRenderer.render(gw.getWorld(), camera.combined);*/
+      //  debugRenderer.render(gw.getWorld(), camera.combined);
     }
 
     public void restart(){
@@ -140,10 +147,14 @@ public class GameScreen extends ScreenAdapter {
         }
     }
 
-    @Override
+   @Override
     public void resize(int width, int height){
         vp.update(width, height);
         camera.position.set(camera.viewportWidth/2, camera.viewportHeight/2, 0);
+    }
+
+    public OrthographicCamera getCamera() {
+        return camera;
     }
 
     public void setState(GameState.State state){
