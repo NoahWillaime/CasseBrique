@@ -17,8 +17,6 @@ public class BlueBrick extends Brick {
     @Override
     public void draw(SpriteBatch sb){
         Vector2 pos = getPosition();
-        sb.begin();
         sb.draw(TextureFactory.getTexBlueBrick(), pos.x, pos.y);
-        sb.end();
     }
 }

@@ -57,11 +57,9 @@ public class Background {
     }
 
     public void draw(SpriteBatch sb){
-        sb.begin();
         Vector2 pos = getPosBody();
         pos.x *= GameWorld.getMetersToPixels();
         pos.y *= GameWorld.getMetersToPixels();
         sb.draw(TextureFactory.getTexBack(), pos.x, pos.y);
-        sb.end();
     }
 }

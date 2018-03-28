@@ -30,13 +30,11 @@ public class GreenBrick extends Brick {
     public void draw(SpriteBatch sb) {
         tempsAnime += Gdx.graphics.getDeltaTime();
         Vector2 pos = getPosition();
-        sb.begin();
         if (nbCoups == 2){
             TextureRegion image = anim.getKeyFrame(tempsAnime);
             sb.draw(image, pos.x, pos.y);
         } else if (nbCoups == 1){
             sb.draw(TextureFactory.getTexGreenBrickB(), pos.x, pos.y);
         }
-        sb.end();
     }
 }

@@ -81,14 +81,12 @@ public class Racket {
     }
 
     public void draw(SpriteBatch sb){
-        sb.begin();
         Vector2 posg = getPosGauche();
         posg.x *= GameWorld.getMetersToPixels();
         posg.y *= GameWorld.getMetersToPixels();
         posg.x -= height/2;
         posg.y -= height/2;
         sb.draw(TextureFactory.getTexRacket(), posg.x, posg.y);
-        sb.end();
     }
 
     public void moveTouch(float x){

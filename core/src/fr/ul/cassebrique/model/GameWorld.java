@@ -26,7 +26,7 @@ import fr.ul.cassebrique.views.GameScreen;
 public class GameWorld {
     private static float METERS_TO_PIXELS = 250f;
     private static float PIXELS_TO_METERS = 1f/METERS_TO_PIXELS;
-    private static Vector2 VITESSE_INITIAL = new Vector2(100, 200);
+    private static Vector2 VITESSE_INITIAL = new Vector2(50, 100);
 
     private World world;
     private GameScreen gs;
@@ -114,11 +114,11 @@ public class GameWorld {
         pos1.x = TextureFactory.getTexBack().getWidth();
         pos1.x -= TextureFactory.getTexBorder().getWidth()/2;
         pos1.y = TextureFactory.getTexBorder().getHeight()/2;
-        balls.add(new Ball(this, pos1));
+        balls.add(new Ball2DS(this, pos1));
         Vector2 pos2 = new Vector2();
         pos2.x = pos1.x;
         pos2.y = pos1.y + TextureFactory.getTexBorder().getHeight();
-        balls.add(new Ball(this, pos2));
+        balls.add(new Ball2DS(this, pos2));
         Vector2 pos3 = new Vector2();
         pos3.x = getRacket().getPos().x + getRacket().getWidth()/2;
         pos3.y = getRacket().getPos().y + getRacket().getHeight()+10;
@@ -145,7 +145,7 @@ public class GameWorld {
             pos.x = getRacket().getPos().x + getRacket().getWidth() / 2;
             pos.y = getRacket().getPos().y + getRacket().getHeight() + 10;
             pos.y += TextureFactory.getTexBall().getHeight() / 2;
-            Ball newBall =  new Ball(this, pos);
+            Ball2DA newBall =  new Ball2DA(this, pos);
             newBall.setSpeed(new Vector2(VITESSE_INITIAL.x, VITESSE_INITIAL.y));
             balls.add(newBall);
         }
@@ -162,12 +162,12 @@ public class GameWorld {
         if (getNbBalls() > 1){
             newpos.y += TextureFactory.getTexBorder().getHeight() * getNbBalls();
         }
-        balls.add(new Ball(this, newpos));
+        balls.add(new Ball2DS(this, newpos));
         Vector2 pos3 = new Vector2();
         pos3.x = getRacket().getPos().x + getRacket().getWidth()/2;
         pos3.y = getRacket().getPos().y + getRacket().getHeight()+10;
         pos3.y += TextureFactory.getTexBall().getHeight()/2;
-        balls.add(new Ball(this, pos3));
+        balls.add(new Ball2DA(this, pos3));
         balls.get(getNbBalls()-1).setSpeed(new Vector2(VITESSE_INITIAL.x, VITESSE_INITIAL.y));
     }
 

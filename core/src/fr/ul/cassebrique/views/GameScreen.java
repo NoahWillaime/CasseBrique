@@ -14,6 +14,7 @@ import com.badlogic.gdx.graphics.g3d.ModelBatch;
 import com.badlogic.gdx.graphics.g3d.ModelInstance;
 import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute;
 import com.badlogic.gdx.graphics.g3d.utils.ModelBuilder;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.utils.Timer;
 import com.badlogic.gdx.utils.viewport.FitViewport;
@@ -56,7 +57,7 @@ public class GameScreen extends ScreenAdapter {
                 isTimerok = true;
             }
         };
-       camera = new OrthographicCamera(TextureFactory.getTexBack().getWidth(), TextureFactory.getTexBack().getHeight());
+        camera = new OrthographicCamera(TextureFactory.getTexBack().getWidth(), TextureFactory.getTexBack().getHeight());
         vp = new FitViewport(TextureFactory.getTexBack().getWidth(), TextureFactory.getTexBack().getHeight(), camera);
         vp.apply();
         camera.position.set(camera.viewportWidth/2, camera.viewportHeight/2, 0);
@@ -66,6 +67,7 @@ public class GameScreen extends ScreenAdapter {
     public void render(float delta) {
         camera.update();
         sb.setProjectionMatrix(camera.combined);
+        sb.begin();
         if (gs.getState() == GameState.State.Running) {
             update();
             gw.draw(sb);
@@ -75,21 +77,27 @@ public class GameScreen extends ScreenAdapter {
             Gdx.app.exit();
         } else {
             gw.draw(sb);
-            sb.begin();
+            Vector2 pos = new Vector2();
             if (gs.getState() == GameState.State.BallLoss){
-                sb.draw(TextureFactory.getTexPerteBalle(), 0, 0);
+                pos.x = camera.viewportWidth/2 - TextureFactory.getTexPerteBalle().getWidth()/2;
+                pos.y = camera.viewportHeight/2 - TextureFactory.getTexPerteBalle().getHeight()/2;
+                sb.draw(TextureFactory.getTexPerteBalle(), pos.x, pos.y);
             } else if (gs.getState() == GameState.State.GameOver) {
-                sb.draw(TextureFactory.getTexPerte(), 0, 0);
+                pos.x = camera.viewportWidth/2 - TextureFactory.getTexPerte().getWidth()/2;
+                pos.y = camera.viewportHeight/2 - TextureFactory.getTexPerte().getHeight()/2;
+                sb.draw(TextureFactory.getTexPerte(), pos.x, pos.y);
             } else if (gs.getState() == GameState.State.Won) {
-                sb.draw(TextureFactory.getTexBravo(), 0, 0);
+                pos.x = camera.viewportWidth/2 - TextureFactory.getTexBravo().getWidth()/2;
+                pos.y = camera.viewportHeight/2 - TextureFactory.getTexBravo().getHeight()/2;
+                sb.draw(TextureFactory.getTexBravo(), pos.x, pos.y);
             }
-            sb.end();
             if (isTimerok) {
                 Timer.schedule(timer, 3);
                 isTimerok = false;
             }
         }
-      //  debugRenderer.render(gw.getWorld(), camera.combined);
+        sb.end();
+        //  debugRenderer.render(gw.getWorld(), camera.combined);
     }
 
     public void restart(){

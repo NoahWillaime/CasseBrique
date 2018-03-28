@@ -62,8 +62,7 @@ public class Ball3D extends Ball {
         pos.y *= GameWorld.getMetersToPixels();
         Vector3 pos3D = new Vector3(pos.x, pos.y, 0);
         mod3D.transform.set(pos3D, rotation);
-     //   mod3D.transform.scale(rayon, rayon, rayon);
-
+        mod3D.transform.scale(rayon, rayon, rayon);
         mb.begin(gw.getCamera());
         mb.render(mod3D);
         mb.end();
