@@ -123,7 +123,7 @@ public class GameWorld {
         pos3.x = getRacket().getPos().x + getRacket().getWidth()/2;
         pos3.y = getRacket().getPos().y + getRacket().getHeight()+10;
         pos3.y += TextureFactory.getTexBall().getHeight()/2;
-        balls.add(new Ball3D(this, pos3));
+        balls.add(new Ball2DA(this, pos3));
         balls.get(getNbBalls()-1).setSpeed(new Vector2(VITESSE_INITIAL.x, VITESSE_INITIAL.y));
     }
 

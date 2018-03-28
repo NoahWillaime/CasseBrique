@@ -25,7 +25,7 @@ public class Ball2DA extends Ball {
         timeSav = System.currentTimeMillis();
         numIm = 0;
         TextureAtlas atlasB;
-        atlasB = new TextureAtlas(Gdx.files.internal("images/boule.pack"));
+        atlasB = new TextureAtlas(Gdx.files.internal("images/Boule.pack"));
         imgBoule = atlasB.createSprites("boule");
     }
 
